@@ -7,11 +7,11 @@
       <div class="footer-head">МЕНЮ</div>
       <nav class="footer-items">
         <ul>
-          <li><a href="#">Главная</a></li>
-          <li><a href="#">Каталог</a></li>
-          <li><a href="#">Доставка и оплата</a></li>
-          <li><a href="#">Новости</a></li>
-          <li><a href="#">Отзывы</a></li>
+          <li><a routerLink="/">Главная</a></li>
+          <li><a routerLink="/catalog">Каталог</a></li>
+          <li><a routerLink="/" fragment="delivery">Доставка и оплата</a></li>
+          <li><a>Новости</a></li>
+          <li><a routerLink="/" fragment="reviews">Отзывы</a></li>
         </ul>
       </nav>
     </div>
@@ -20,7 +20,8 @@
       <div class="footer-head">КАТЕГОРИИ</div>
       <nav class="footer-items">
         <ul>
-          <li *ngFor="let category of categories"><a href="#">{{category.name}}</a></li>
+          <li *ngFor="let category of categories"><a
+            routerLink="/catalog" [queryParams]="{types: category?.typesUrl}">{{category.name}}</a></li>
         </ul>
       </nav>
     </div>
