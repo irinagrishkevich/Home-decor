@@ -1,25 +1,67 @@
 <div class="favourite">
-    <div class="container">
-      <div class="favourite-title">Избранное</div>
-      <div class="favourite-empty" *ngIf="!products || (products && products.length === 0)">
-        <div class="favourite-empty-title">В избранном нет товаров</div>
-        <button class="button" routerLink="/catalog">В каталог</button>
-      </div>
-      <div class="favourite-products" *ngIf="products && products.length > 0">
-        <div class="favourite-product" *ngFor="let product of products">
-          <div class="favourite-product-image" style="background-image: url({{serverStaticPath + product.image}})"></div>
-          <div class="favourite-product-name">{{product.name}}</div>
-          <div class="favourite-product-price">{{product.price}} BYN</div>
-          <div class="favourite-product-action">
-            <button class="button" routerLink="/product/{{product.url}}">Открыть</button>
+  <div class="container">
+    <div class="favourite-title">Избранное</div>
+    <div class="favourite-empty" *ngIf="!products || products.length === 0">
+      <div class="favourite-empty-title">В избранном нет товаров</div>
+      <button class="button" routerLink="/catalog">В каталог</button>
+    </div>
+    <div class="favourite-products" *ngIf="products && products.length > 0">
+      <div class="favourite-product" *ngFor="let product of products">
+        <div
+          class="favourite-product-image"
+          [style.background-image]="'url(' + serverStaticPath + product.image + ')'"
+        ></div>
+        <div class="favourite-product-name">{{ product.name }}</div>
+        <div class="favourite-product-price">{{ product.price }} BYN</div>
+        <div class="favourite-product-action">
+          <button
+            class="button"
+            *ngIf="!product.cartQuantity"
+            (click)="addToCart(product)">
+            В корзину
+          </button>
+
+          <div class="favourite-product-in-cart" *ngIf="product.cartQuantity" >
+            <button class="button button-transparent button-in-cart" (click)="removeFromCart(product)">
+              <span>В корзине</span>
+              <span>Удалить</span>
+            </button>
+            <count-selector
+              [count]="product.cartQuantity"
+              (onCountChange)="updateCartQuantity(product, $event)"
+            ></count-selector>
           </div>
-          <div class="favourite-product-remove" (click)="removeFromFavourites(product.id)">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="1.93562" y1="2.6499" x2="13.9564" y2="14.6707" stroke="#A8ABA7" stroke-linecap="round"/>
-              <line x1="13.9238" y1="2.62996" x2="1.90301" y2="14.6508" stroke="#A8ABA7" stroke-linecap="round"/>
-            </svg>
-          </div>
+        </div>
+        <div
+          class="favourite-product-remove"
+          (click)="removeFromFavourites(product.id)"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line
+              x1="1.93562"
+              y1="2.6499"
+              x2="13.9564"
+              y2="14.6707"
+              stroke="#A8ABA7"
+              stroke-linecap="round"
+            />
+            <line
+              x1="13.9238"
+              y1="2.62996"
+              x2="1.90301"
+              y2="14.6508"
+              stroke="#A8ABA7"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
       </div>
     </div>
-</div>
+  </div>
 </div>

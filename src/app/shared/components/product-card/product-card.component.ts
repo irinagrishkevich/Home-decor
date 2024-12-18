@@ -22,20 +22,28 @@ export class ProductCardComponent implements OnInit {
   count: number = 1
   @Input() isLight: boolean = false
   @Input() countInCart: number | undefined = 0
+
+  isLogged: boolean = false;
   // isInCart: boolean = false
 
 
 
   constructor(private cartService: CartService,
-              private authService: AuthService,
               private favouriteService: FavouriteService,
               private _snackBar: MatSnackBar,
-              private router: Router) { }
+              private router: Router,
+              private authService: AuthService) {
+    this.isLogged = this.authService.getIsLoggedIn()
+  }
 
   ngOnInit(): void {
     if(this.countInCart && this.countInCart > 1){
       this.count = this.countInCart
     }
+    this.authService.isLogged$.subscribe((isLogged: boolean) => {
+      this.isLogged = isLogged;
+    })
+
 
   }
 

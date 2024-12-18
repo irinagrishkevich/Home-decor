@@ -50,6 +50,8 @@ export class DetailComponent implements OnInit {
   products: ProductType[] = []
   product!: ProductType
 
+  isLogged: boolean = false;
+
 
 
   constructor(private productService: ProductService,
@@ -57,14 +59,15 @@ export class DetailComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private favouriteService: FavouriteService,
               private authService: AuthService,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar) {
+    this.isLogged = this.authService.getIsLoggedIn()
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.productService.getProduct(params['url'])
         .subscribe((data: ProductType) => {
           this.product = data
-
 
           this.cartService.getCart()
             .subscribe((cartData: CartType | DefaultResponseType) => {
@@ -103,9 +106,6 @@ export class DetailComponent implements OnInit {
 
 
 
-
-
-
           //if we don't have a product => 404
         })
     })
@@ -114,6 +114,10 @@ export class DetailComponent implements OnInit {
       .subscribe((data: ProductType[]) => {
         this.products = data
       })
+
+    this.authService.isLogged$.subscribe((isLogged: boolean) => {
+      this.isLogged = isLogged;
+    })
   }
 
   updateCount(value: number){
