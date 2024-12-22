@@ -28,6 +28,10 @@ export class CartService {
     );
   }
 
+  clearCartCount(): void {
+    this.count$.next(0);
+  }
+
   getCartCount(): Observable<{ count: number } | DefaultResponseType> {
     return this.http.get<{ count: number } | DefaultResponseType>(
       environment.api + 'cart/count',

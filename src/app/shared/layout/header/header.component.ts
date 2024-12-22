@@ -52,31 +52,54 @@ export class HeaderComponent implements OnInit {
         }
       })
 
-
-
+    this.updateCartCount()
     this.authServices.isLogged$.subscribe((isLogged: boolean) => {
       this.isLogged = isLogged;
+
+
+      if (this.isLogged) {
+
+        this.updateCartCount();
+      } else {
+        this.clearCart();
+      }
     })
+
+
+
+
+
+
+  }
+  updateCartCount(): void {
     this.cartService.getCartCount()
       .subscribe((data: { count: number } | DefaultResponseType) => {
         if ((data as DefaultResponseType).error !== undefined) {
-          throw new Error((data as DefaultResponseType).message)
+          console.error((data as DefaultResponseType).message);
+          return;
         }
-        this.count = (data as {count: number}).count
-      })
+        this.count = (data as { count: number }).count;
 
-    this.cartService.count$.subscribe((count: number) => {
-      this.count = count
-    })
+        this.cartService.count$.subscribe((count: number) => {
+          this.count = count
+        })
+      });
+
+  }
+  clearCart(): void {
+    this.cartService.clearCartCount();
+    this.count = 0;
   }
 
   logout(): void {
     this.authServices.logout()
       .subscribe({
         next: () => {
+          this.clearCart()
           this.doLogout()
         },
         error: () => {
+          this.clearCart()
           this.doLogout()
         }
       })

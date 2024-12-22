@@ -43,11 +43,11 @@
             </svg>
           </a>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-              <a routerLink="/profile">Профиль</a>
+            <button mat-menu-item routerLink="/profile">
+              <a>Профиль</a>
             </button>
-            <button mat-menu-item>
-              <span (click)="logout()">Выйти</span>
+            <button mat-menu-item (click)="logout()">
+              <span>Выйти</span>
             </button>
           </mat-menu>
 

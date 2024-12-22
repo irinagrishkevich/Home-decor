@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ProductService} from "../../../shared/services/product.service";
 import {ProductType} from "../../../../types/product.type";
 import {CategoryService} from "../../../shared/services/category.service";
@@ -25,6 +25,7 @@ export class CatalogComponent implements OnInit {
   products: ProductType[] = []
   categoriesWithTypes: CategoryWithTypeType[] = []
   activeParams: ActiveParamsType = {types: []}
+  firstPage: boolean = true
   appliedFilters: AppliedFilterType[] = [];
   sortingOpen: boolean = false;
   sortingOptions: { name: string, value: string }[] = [
@@ -94,6 +95,9 @@ export class CatalogComponent implements OnInit {
           .subscribe(params => {
             this.activeParams = ActiveParamsUtil.processParams(params)
 
+            if(!this.activeParams.page){
+              this.activeParams.page = 1
+            }
             this.appliedFilters = []
             this.activeParams.types.forEach(url => {
               for (let i = 0; i < this.categoriesWithTypes.length; i++) {
@@ -127,6 +131,8 @@ export class CatalogComponent implements OnInit {
                 urlParam: 'diameterTo'
               })
             }
+
+
 
             this.productService.getProducts(this.activeParams)
               .subscribe(data => {
@@ -196,6 +202,13 @@ export class CatalogComponent implements OnInit {
 
   toggleSorting() {
     this.sortingOpen = !this.sortingOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  click(event: Event) {
+    if (this.sortingOpen  && !(event.target as HTMLElement).closest('.catalog-sorting')) {
+      this.sortingOpen = false
+    }
   }
 
 
